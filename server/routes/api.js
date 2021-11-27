@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
+const Snippet = require("../models/Snippet");
 const jwt = require("jsonwebtoken");
 const validateToken = require("../auth/validateToken.js");
 const multer = require("multer");
@@ -17,6 +18,35 @@ router.get("/private", validateToken, (req, res, next) => {
   });
 });
 
+router.post("/snippet", validateToken, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.email });
+    const snippet = await Snippet.findOne({ user: user._id });
+    if (snippet) {
+      await Snippet.updateOne(
+        { user: snippet.user },
+        { snippetId: snippet.snippetId },
+        { $push: { snippet: { $each: req.body.snippet } } }
+      );
+    } else {
+      await new Snippet({
+        user: user._id,
+        snippet: req.body.snippet,
+        snippetId: idGen(),
+      }).save();
+    }
+    res.status(200).send("ok");
+  } catch (e) {
+    console.log(e);
+    res.status(400).send("Something went wrong");
+  }
+});
+
+let idGen = () => {
+  return Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
+};
 router.get("/login", (req, res, next) => {
   res.render("login");
 });
@@ -38,7 +68,7 @@ router.post("/login", upload.none(), (req, res, next) => {
             jwtPayload,
             process.env.SECRET,
             {
-              expiresIn: 120,
+              expiresIn: 1200,
             },
             (err, token) => {
               console.log(token);
