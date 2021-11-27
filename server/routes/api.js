@@ -30,13 +30,15 @@ router.post("/comment", validateToken, async (req, res, next) => {
       await Comment.updateOne(
         { user: comment.user },
         { snippetId: comment.snippetId },
-        { $push: { comment: { $each: req.body.comment } } }
+        { $push: { comment: { $each: req.body.comment } } },
+        { commentId: comment.commentId }
       );
     } else {
       await new Comment({
         user: user._id,
         snippetId: snippet._id,
         comment: req.body.comment,
+        commentId: idGen(),
       }).save();
     }
     res.status(200).send("ok");
@@ -70,7 +72,7 @@ router.get("/snippet", (req, res, next) => {
 router.post("/snippet", validateToken, async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.email });
-    const snippet = await Snippet.findOne({ user: user._id });
+    const snippet = await Snippet.findOne({ snippet: req.body.snippet });
     console.log(req.body.snippet);
     if (snippet) {
       await Snippet.updateOne(
