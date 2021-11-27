@@ -3,9 +3,12 @@ var router = express.Router();
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const { body, validationResult } = require("express-validator");
+
 const User = require("../models/User");
 const Snippet = require("../models/Snippet");
+const Comment = require("../models/Comment");
 const jwt = require("jsonwebtoken");
+
 const validateToken = require("../auth/validateToken.js");
 const multer = require("multer");
 const storage = multer.memoryStorage();
@@ -18,10 +21,57 @@ router.get("/private", validateToken, (req, res, next) => {
   });
 });
 
+router.post("/comment", validateToken, async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.email });
+    const snippet = await Snippet.findOne({ snippet: snippet._id });
+    const comment = await Comment.findOne({ comment: user._id });
+    if (comment) {
+      await Comment.updateOne(
+        { user: comment.user },
+        { snippetId: comment.snippetId },
+        { $push: { comment: { $each: req.body.comment } } }
+      );
+    } else {
+      await new Comment({
+        user: user._id,
+        snippetId: snippet._id,
+        comment: req.body.comment,
+      }).save();
+    }
+    res.status(200).send("ok");
+  } catch (e) {
+    console.log(e);
+    res.status(400).send("Something went wrong");
+  }
+});
+
+router.get("/snippet", (req, res, next) => {
+  var MongoClient = require("mongodb").MongoClient;
+  var url = "mongodb://localhost:27017/";
+  var snippets = [];
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db("projectdb");
+    dbo
+      .collection("snippets")
+      .find({})
+      .toArray(function (err, result) {
+        if (err) throw err;
+        console.log(result);
+        snippets = result;
+        db.close();
+      });
+  });
+  console.log(snippets);
+  return { snippets };
+});
+
 router.post("/snippet", validateToken, async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.email });
     const snippet = await Snippet.findOne({ user: user._id });
+    console.log(req.body.snippet);
     if (snippet) {
       await Snippet.updateOne(
         { user: snippet.user },
@@ -47,6 +97,7 @@ let idGen = () => {
     .toString(16)
     .substring(1);
 };
+
 router.get("/login", (req, res, next) => {
   res.render("login");
 });
