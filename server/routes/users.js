@@ -7,15 +7,14 @@ const { body, validationResult } = require("express-validator");
 
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-
-router.get("/login", (req, res, next) => {
-  res.render("login");
-});
-
 const validateToken = require("../auth/validateToken.js");
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+
+router.get("/login", (req, res, next) => {
+  res.render("login");
+});
 
 router.post("/login", upload.none(), (req, res, next) => {
   User.findOne({ email: req.body.email }, (err, user) => {

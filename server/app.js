@@ -5,6 +5,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var cors = require("cors");
 
 const mongoDB = "mongodb://localhost:27017/projectdb";
 mongoose.connect(mongoDB);
@@ -28,4 +29,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/users", usersRouter);
 app.use("/api", apiRouter);
 
+if (process.env.NODE_ENV === "development") {
+  var corsOptions = {
+    origin: "http://localhost:3000",
+    optionSuccessStatus: 200,
+  };
+  app.use(cors(corsOptions));
+}
 module.exports = app;

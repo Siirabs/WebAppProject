@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/Siirabs/WebAppProject/issues"
   },
-  "homepage": "https://github.com/Siirabs/WebAppProject#readme"
+  "homepage": "https://github.com/Siirabs/WebAppProject#readme",
+  "dependencies": {
+    "react-router-dom": "^6.1.1"
+  }
 }

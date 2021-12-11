@@ -1,6 +1,5 @@
 var express = require("express");
 var router = express.Router();
-const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const { body, validationResult } = require("express-validator");
 
@@ -48,26 +47,9 @@ router.post("/comment", validateToken, async (req, res, next) => {
   }
 });
 
-router.get("/snippet", (req, res, next) => {
-  var MongoClient = require("mongodb").MongoClient;
-  var url = "mongodb://localhost:27017/";
-  var snippets = [];
-  MongoClient.connect(url, function (err, db) {
-    if (err) throw err;
-    var dbo = db.db("projectdb");
-    dbo
-      .collection("snippets")
-      .find({})
-      .toArray(function (err, result) {
-        if (err) throw err;
-        console.log(result);
-        snippets = result;
-        db.close();
-      });
-    res.status(200).send("ok");
-  });
-  console.log(snippets);
-  return { snippets };
+router.get("/snippet", async (req, res, next) => {
+  var snippets = await Snippet.find({});
+  res.json(snippets);
 });
 
 router.post("/snippet", validateToken, async (req, res, next) => {
