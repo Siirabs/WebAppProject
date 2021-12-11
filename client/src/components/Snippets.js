@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 function Snippets() {
   const [data, setData] = useState([]);
   useEffect(() => {
-    fetch("/api/snippet", {
+    fetch("/api/snippets", {
       method: "GET",
       headers: {
         "Content-type": "application/json",

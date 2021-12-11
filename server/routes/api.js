@@ -47,7 +47,7 @@ router.post("/comment", validateToken, async (req, res, next) => {
   }
 });
 
-router.get("/snippet", async (req, res, next) => {
+router.get("/snippets", async (req, res, next) => {
   var snippets = await Snippet.find({});
   res.json(snippets);
 });
