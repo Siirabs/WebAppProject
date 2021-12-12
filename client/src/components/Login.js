@@ -21,7 +21,12 @@ function Login() {
     <div>
       <h2>Login</h2>
       <form onSubmit={submit} on onChange={handleChange}>
-        <input type="string" id="email" placeholder="email" name="emai"></input>
+        <input
+          type="string"
+          id="email"
+          placeholder="email"
+          name="email"
+        ></input>
         <input
           type="string"
           id="password"
