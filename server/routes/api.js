@@ -23,8 +23,8 @@ router.get("/private", validateToken, (req, res, next) => {
 router.post("/comment", validateToken, async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.email });
-    const snippet = await Snippet.findOne({ snippet: snippet._id });
-    const comment = await Comment.findOne({ comment: user._id });
+    const snippet = await Snippet.findOne({ snippetId: req.body.snippetId });
+    const comment = await Comment.findOne({ comment: req.body.comment });
     if (comment) {
       await Comment.updateOne(
         { user: comment.user },
@@ -35,7 +35,7 @@ router.post("/comment", validateToken, async (req, res, next) => {
     } else {
       await new Comment({
         user: user._id,
-        snippetId: snippet._id,
+        snippetId: req.body.snippetId,
         comment: req.body.comment,
         commentId: idGen(),
       }).save();
@@ -52,6 +52,27 @@ router.get("/snippets", async (req, res, next) => {
   res.json(snippets);
 });
 
+router.get("/snippet/:snippet", async function (req, res, next) {
+  const snippet = await Snippet.findOne(
+    { snippetId: req.params.snippet },
+    (err, snippet) => {
+      if (err) {
+        if (err.name === "CastError") {
+          return res
+            .status(404)
+            .send(`Snippet ${req.params.snippet} not found`);
+        }
+        return next(err);
+      }
+      if (snippet) {
+        return res.json(snippet);
+      } else {
+        return res.status(404).send(`Book ${req.params.snippet} not found`);
+      }
+    }
+  );
+});
+
 router.post("/snippet", validateToken, async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.email });
@@ -66,6 +87,7 @@ router.post("/snippet", validateToken, async (req, res, next) => {
     } else {
       await new Snippet({
         user: user._id,
+        title: req.body.title,
         snippet: req.body.snippet,
         snippetId: idGen(),
       }).save();

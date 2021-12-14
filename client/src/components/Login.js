@@ -11,7 +11,14 @@ function Login() {
       },
       body: JSON.stringify(userData),
       mode: "cors",
-    });
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.token) {
+          storeToken(data.token);
+          window.location.href = "/";
+        }
+      });
   };
 
   const handleChange = (e) => {
@@ -39,4 +46,8 @@ function Login() {
   );
 }
 
+function storeToken(token) {
+  localStorage.setItem("auth_token", token);
+  window.location.href = "/";
+}
 export default Login;

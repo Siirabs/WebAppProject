@@ -12,6 +12,7 @@ function Register() {
       body: JSON.stringify(userData),
       mode: "cors",
     });
+    window.location.href = "/login";
   };
 
   const handleChange = (e) => {
