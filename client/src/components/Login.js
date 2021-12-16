@@ -17,6 +17,7 @@ function Login() {
       .then((data) => {
         if (data.token) {
           storeToken(data.token);
+          //redirecting user to home page after successful login
           window.location.href = "/";
         }
       });

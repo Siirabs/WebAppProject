@@ -13,6 +13,7 @@ function Register() {
       body: JSON.stringify(userData),
       mode: "cors",
     });
+    //redirecting user to login screen after successful register
     window.location.href = "/login";
   };
 
