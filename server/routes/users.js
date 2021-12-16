@@ -3,11 +3,9 @@ var router = express.Router();
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const { body, validationResult } = require("express-validator");
-/* GET users listing. */
 
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const validateToken = require("../auth/validateToken.js");
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -36,7 +34,6 @@ router.post("/login", upload.none(), (req, res, next) => {
               expiresIn: 12000,
             },
             (err, token) => {
-              console.log(token);
               res.json({ success: true, token });
             }
           );
@@ -57,14 +54,13 @@ router.post(
   upload.none(),
   body("email").isEmail().trim().escape(),
   body("password").isLength({
-    min: 8,
+    min: 1,
   }) /*.matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~`!@#$%^&*()-_+={}[\]\|\\;:"<>,.\/\?]).{8,}$/)*/,
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(403).json({ message: "Password is not strong enough" });
     }
-    console.log(req.body);
     User.findOne({ email: req.body.email }, (err, user) => {
       if (err) throw err;
       if (user) {

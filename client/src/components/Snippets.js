@@ -5,8 +5,8 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Snippet from "./Snippet";
-/*import "../snippets.css";*/
 
+//Styling for grid items
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -21,6 +21,7 @@ function Snippets() {
   const addSnippet = (newSnippet) => {
     setData((data) => [...data, newSnippet]);
   };
+  //Fetching all snippets from backend
   useEffect(() => {
     fetch("/api/snippets", {
       method: "GET",
@@ -37,7 +38,7 @@ function Snippets() {
   if (!data) {
     return null;
   }
-
+  //Grid from MUI to show snippets
   return (
     <>
       <Snippet addSnippet={addSnippet}></Snippet>
@@ -50,12 +51,13 @@ function Snippets() {
           alignItems="center"
           direction="row"
         >
-          <Grid item xs={6}>
+          <Grid item xs={8}>
             {data.map((snippet) => (
               <Item
                 key={snippet._id}
                 onClick={() => navigate("/snippet/" + snippet.snippetId)}
                 className="snippet"
+                style={{ marginBottom: "3px" }}
               >
                 <h3>{snippet.title}</h3>
                 {snippet.snippet}

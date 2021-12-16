@@ -4,6 +4,7 @@ function Register() {
   const [userData, setUserData] = useState({});
   const submit = (e) => {
     e.preventDefault();
+    //Posting new user to backend
     fetch("/users/register", {
       method: "POST",
       headers: {

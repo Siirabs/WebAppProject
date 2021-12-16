@@ -4,6 +4,7 @@ function Login() {
   const [userData, setUserData] = useState({});
   const submit = (e) => {
     e.preventDefault();
+    //fetching user from backend
     fetch("/users/login", {
       method: "POST",
       headers: {
@@ -46,6 +47,7 @@ function Login() {
   );
 }
 
+//saving jwt token to localstorage for verification purposes
 function storeToken(token) {
   localStorage.setItem("auth_token", token);
   window.location.href = "/";

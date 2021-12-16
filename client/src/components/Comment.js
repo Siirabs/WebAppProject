@@ -4,9 +4,11 @@ import { useParams } from "react-router";
 function Comment(props) {
   const { id } = useParams();
   const [commentData, setCommentData] = useState({});
+  //getting jwt token from localstorage
   const authToken = localStorage.getItem("auth_token");
   const submit = async (e) => {
     e.preventDefault();
+    //Posting a new comment and verifying user.
     await fetch("/api/comment", {
       method: "POST",
       headers: {
@@ -24,6 +26,8 @@ function Comment(props) {
   const handleChange = (e) => {
     setCommentData({ ...commentData, [e.target.name]: e.target.value });
   };
+
+  //if token exists then input fields are visible.
   return (
     <div className="addComment">
       {authToken && <h2>Add a comment</h2> && (

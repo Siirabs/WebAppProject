@@ -12,14 +12,8 @@ const validateToken = require("../auth/validateToken.js");
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-/* GET home page. */
 
-router.get("/private", validateToken, (req, res, next) => {
-  res.json({
-    email: req.email,
-  });
-});
-
+//Post a new comment
 router.post("/comment", validateToken, async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.email });
@@ -40,9 +34,9 @@ router.post("/comment", validateToken, async (req, res, next) => {
   }
 });
 
+//Get comments for specific snippet
 router.get("/comments/:snippetId", async function (req, res, next) {
   const { snippetId } = req.params;
-  //console.log(snippetId);
   await Comment.find({ snippetId: req.params.snippetId }, (err, comment) => {
     if (err) {
       if (err.name === "CastError") {
@@ -58,11 +52,13 @@ router.get("/comments/:snippetId", async function (req, res, next) {
   });
 });
 
+//Get all snippets
 router.get("/snippets", async (req, res, next) => {
   var snippets = await Snippet.find({});
   res.json(snippets);
 });
 
+//Get specific snippet with snippetId from params
 router.get("/snippet/:snippet", async function (req, res, next) {
   const snippet = await Snippet.findOne(
     { snippetId: req.params.snippet },
@@ -84,6 +80,7 @@ router.get("/snippet/:snippet", async function (req, res, next) {
   );
 });
 
+//Post a new snippet
 router.post("/snippet", validateToken, async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.email });
@@ -95,15 +92,20 @@ router.post("/snippet", validateToken, async (req, res, next) => {
       title: req.body.title,
       snippet: req.body.snippet,
       snippetId: idGen(),
-    }).save();
-
-    res.status(200).send("ok");
+    }).save((err, snippet) => {
+      if (err) {
+        return next(err);
+      } else {
+        return res.json(snippet);
+      }
+    });
   } catch (e) {
     console.log(e);
     res.status(400).send("Something went wrong");
   }
 });
 
+//Generates a random id for snippets and comments
 let idGen = () => {
   return Math.floor((1 + Math.random()) * 0x10000)
     .toString(16)

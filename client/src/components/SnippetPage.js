@@ -5,8 +5,8 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Comment from "./Comment";
-import "../snippets.css";
 
+//Styling for grid items
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -15,6 +15,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function SnippetPage() {
+  //getting snippetId from params
   const { id } = useParams();
   const [snippet, setSnippet] = useState();
   const [comment, setComment] = useState();
@@ -22,6 +23,7 @@ function SnippetPage() {
   const addComment = (newComment) => {
     setComment((data) => [...data, newComment]);
   };
+  //fetching a specific snippet with its id
   useEffect(() => {
     fetch("/api/snippet/" + id, {
       method: "GET",
@@ -33,7 +35,7 @@ function SnippetPage() {
       .then((response) => response.json())
       .then((json) => setSnippet(json));
   }, [id]);
-
+  //fetching comments to that specific snippet
   useEffect(() => {
     fetch("/api/comments/" + id, {
       method: "GET",
@@ -52,6 +54,7 @@ function SnippetPage() {
     return null;
   }
 
+  //Grid from MUI to show snippet and comments
   return (
     <Box sx={{ flexGrow: 1 }} className="box">
       <Grid
