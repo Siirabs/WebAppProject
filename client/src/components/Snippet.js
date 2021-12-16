@@ -14,6 +14,7 @@ function Snippet() {
       body: JSON.stringify(snippetData),
       mode: "cors",
     });
+    window.location.reload();
   };
   const handleChange = (e) => {
     setSnippetData({ ...snippetData, [e.target.name]: e.target.value });
