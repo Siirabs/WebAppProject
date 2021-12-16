@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useParams } from "react-router";
 
-function Comment() {
+function Comment(props) {
   const { id } = useParams();
   const [commentData, setCommentData] = useState({});
   const authToken = localStorage.getItem("auth_token");
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    fetch("/api/comment", {
+    await fetch("/api/comment", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + authToken,
@@ -19,19 +19,21 @@ function Comment() {
       }),
       mode: "cors",
     });
+    props.addComment(commentData);
   };
   const handleChange = (e) => {
     setCommentData({ ...commentData, [e.target.name]: e.target.value });
   };
   return (
-    <div>
+    <div className="addComment">
       {authToken && <h2>Add a comment</h2> && (
         <form onSubmit={submit} onChange={handleChange}>
-          <input
+          <textarea
             type="string"
             id="comment"
             placeholder="comment"
             name="comment"
+            className="commentInput"
           />
           <input type="submit" id="submit" value="Post" />
         </form>

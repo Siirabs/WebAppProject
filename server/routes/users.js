@@ -33,7 +33,7 @@ router.post("/login", upload.none(), (req, res, next) => {
             jwtPayload,
             process.env.SECRET,
             {
-              expiresIn: 1200,
+              expiresIn: 12000,
             },
             (err, token) => {
               console.log(token);

@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
+import Snippet from "./Snippet";
 /*import "../snippets.css";*/
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -16,6 +17,10 @@ const Item = styled(Paper)(({ theme }) => ({
 function Snippets() {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
+
+  const addSnippet = (newSnippet) => {
+    setData((data) => [...data, newSnippet]);
+  };
   useEffect(() => {
     fetch("/api/snippets", {
       method: "GET",
@@ -27,7 +32,6 @@ function Snippets() {
       .then((response) => response.json())
       .then((json) => {
         setData(json);
-        //console.log(json);
       });
   }, []);
   if (!data) {
@@ -35,41 +39,32 @@ function Snippets() {
   }
 
   return (
-    <Box sx={{ flexGrow: 1 }} className="box">
-      <Grid
-        container
-        spacing={2}
-        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-        justifyContent="center"
-        alignItems="center"
-        direction="row"
-      >
-        <Grid item xs={6}>
-          {data.map((snippet) => (
-            <Item
-              key={snippet._id}
-              onClick={() => navigate("/snippet/" + snippet.snippetId)}
-              className="snippet"
-            >
-              <h3>{snippet.title}</h3>
-              {snippet.snippet}
-            </Item>
-          ))}
-        </Grid>
-      </Grid>
-    </Box>
-    /*<div class="container">
-      {data.map((snippet) => (
-        <div
-          key={snippet._id}
-          onClick={() => navigate("/snippet/" + snippet.snippetId)}
-          class="snippet"
+    <>
+      <Snippet addSnippet={addSnippet}></Snippet>
+      <Box sx={{ flexGrow: 1 }} className="box">
+        <Grid
+          container
+          spacing={2}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          justifyContent="center"
+          alignItems="center"
+          direction="row"
         >
-          <h3>{snippet.title}</h3>
-          {snippet.snippet}
-        </div>
-      ))}
-    </div>*/
+          <Grid item xs={6}>
+            {data.map((snippet) => (
+              <Item
+                key={snippet._id}
+                onClick={() => navigate("/snippet/" + snippet.snippetId)}
+                className="snippet"
+              >
+                <h3>{snippet.title}</h3>
+                {snippet.snippet}
+              </Item>
+            ))}
+          </Grid>
+        </Grid>
+      </Box>
+    </>
   );
 }
 

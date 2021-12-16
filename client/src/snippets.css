@@ -23,3 +23,19 @@
 .submit {
   display: inline-block;
 }
+
+.addComment {
+  border: 1px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.commentInput {
+  width: 100%;
+  height: 80%;
+}
+
+.commentItem {
+  margin-top: 100px;
+}

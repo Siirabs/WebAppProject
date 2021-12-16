@@ -1,11 +1,11 @@
 import { useState } from "react";
 import "../snippets.css";
-function Snippet() {
+function Snippet(props) {
   const [snippetData, setSnippetData] = useState({});
   const authToken = localStorage.getItem("auth_token");
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    fetch("/api/snippet", {
+    await fetch("/api/snippet", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + authToken,
@@ -14,7 +14,7 @@ function Snippet() {
       body: JSON.stringify(snippetData),
       mode: "cors",
     });
-    window.location.reload();
+    props.addSnippet(snippetData);
   };
   const handleChange = (e) => {
     setSnippetData({ ...snippetData, [e.target.name]: e.target.value });

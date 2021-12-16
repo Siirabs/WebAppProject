@@ -25,21 +25,14 @@ router.post("/comment", validateToken, async (req, res, next) => {
     const user = await User.findOne({ email: req.email });
     const snippet = await Snippet.findOne({ snippetId: req.body.snippetId });
     const comment = await Comment.findOne({ comment: req.body.comment });
-    if (comment) {
-      await Comment.updateOne(
-        { user: comment.user },
-        { snippetId: comment.snippetId },
-        { $push: { comment: { $each: req.body.comment } } },
-        { commentId: comment.commentId }
-      );
-    } else {
-      await new Comment({
-        user: user._id,
-        snippetId: req.body.snippetId,
-        comment: req.body.comment,
-        commentId: idGen(),
-      }).save();
-    }
+
+    await new Comment({
+      user: user._id,
+      snippetId: req.body.snippetId,
+      comment: req.body.comment,
+      commentId: idGen(),
+    }).save();
+
     res.status(200).send("ok");
   } catch (e) {
     console.log(e);
@@ -49,7 +42,7 @@ router.post("/comment", validateToken, async (req, res, next) => {
 
 router.get("/comments/:snippetId", async function (req, res, next) {
   const { snippetId } = req.params;
-  console.log(snippetId);
+  //console.log(snippetId);
   await Comment.find({ snippetId: req.params.snippetId }, (err, comment) => {
     if (err) {
       if (err.name === "CastError") {
@@ -96,20 +89,14 @@ router.post("/snippet", validateToken, async (req, res, next) => {
     const user = await User.findOne({ email: req.email });
     const snippet = await Snippet.findOne({ snippet: req.body.snippet });
     console.log(req.body.snippet);
-    if (snippet) {
-      await Snippet.updateOne(
-        { user: snippet.user },
-        { snippetId: snippet.snippetId },
-        { $push: { snippet: { $each: req.body.snippet } } }
-      );
-    } else {
-      await new Snippet({
-        user: user._id,
-        title: req.body.title,
-        snippet: req.body.snippet,
-        snippetId: idGen(),
-      }).save();
-    }
+
+    await new Snippet({
+      user: user._id,
+      title: req.body.title,
+      snippet: req.body.snippet,
+      snippetId: idGen(),
+    }).save();
+
     res.status(200).send("ok");
   } catch (e) {
     console.log(e);
