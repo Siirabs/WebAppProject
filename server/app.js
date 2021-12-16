@@ -29,7 +29,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/users", usersRouter);
 app.use("/api", apiRouter);
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.resolve("..", "client", "build")));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve("..", "client", "build", "index.html"))
+  );
+} else if (process.env.NODE_ENV === "development") {
   var corsOptions = {
     origin: "http://localhost:3000",
     optionSuccessStatus: 200,

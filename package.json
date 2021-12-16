@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "cd server && npm start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "install": "cd client && npm install",
     "dev:client": "cd client && npm start",
     "preinstall": "cd server && npm install",
-    "dev:server": "cd server && npm run dev"
+    "dev:server": "cd server && npm run dev",
+    "build": "cd client && npm run build",
+    "app": "concurrently \"cd server && npm start\" \"cd client && npm start\""
   },
   "repository": {
     "type": "git",
@@ -26,6 +29,7 @@
     "@mui/icons-material": "^5.2.4",
     "@mui/material": "^5.2.4",
     "@mui/styles": "^5.2.3",
+    "concurrently": "^6.4.0",
     "react-router-dom": "^6.1.1"
   }
 }
