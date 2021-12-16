@@ -55,6 +55,7 @@ function Snippets() {
             {data.map((snippet) => (
               <Item
                 key={snippet._id}
+                //Navigating to specific snippet with snippetId
                 onClick={() => navigate("/snippet/" + snippet.snippetId)}
                 className="snippet"
                 style={{ marginBottom: "3px" }}
