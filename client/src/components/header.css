@@ -1,0 +1,10 @@
+#box {
+  display: flex;
+  flex-direction: row-reverse;
+  position: sticky;
+  top: 0;
+}
+
+li {
+  margin: 5px 5px;
+}

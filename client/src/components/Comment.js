@@ -33,7 +33,7 @@ function Comment() {
             placeholder="comment"
             name="comment"
           />
-          <input type="submit" id="submit" />
+          <input type="submit" id="submit" value="Post" />
         </form>
       )}
     </div>

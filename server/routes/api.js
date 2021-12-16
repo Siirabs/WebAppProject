@@ -47,6 +47,24 @@ router.post("/comment", validateToken, async (req, res, next) => {
   }
 });
 
+router.get("/comments/:snippetId", async function (req, res, next) {
+  const { snippetId } = req.params;
+  console.log(snippetId);
+  await Comment.find({ snippetId: req.params.snippetId }, (err, comment) => {
+    if (err) {
+      if (err.name === "CastError") {
+        return res.json({ error: "comment not found" });
+      }
+      return next(err);
+    }
+    if (comment) {
+      return res.json(comment);
+    } else {
+      return res.json({ error: "comment not found" });
+    }
+  });
+});
+
 router.get("/snippets", async (req, res, next) => {
   var snippets = await Snippet.find({});
   res.json(snippets);

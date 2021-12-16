@@ -1,0 +1,25 @@
+.box {
+  margin-top: 40px;
+}
+
+.addSnippet {
+  border: 1px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  width: 100%;
+  border: 1px solid black;
+  display: block;
+}
+
+.snippet {
+  width: 100%;
+  height: 80%;
+}
+
+.submit {
+  display: inline-block;
+}

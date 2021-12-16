@@ -25,7 +25,8 @@ function App() {
           path="/"
           element={
             <>
-              <Snippets /> <Snippet />
+              <Snippet />
+              <Snippets />
             </>
           }
         />

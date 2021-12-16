@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import "../snippets.css";
 function Snippet() {
   const [snippetData, setSnippetData] = useState({});
   const authToken = localStorage.getItem("auth_token");
@@ -19,17 +19,24 @@ function Snippet() {
     setSnippetData({ ...snippetData, [e.target.name]: e.target.value });
   };
   return (
-    <div>
+    <div className="addSnippet">
       {authToken && <h2>Add a snippet</h2> && (
-        <form onSubmit={submit} onChange={handleChange}>
-          <input type="string" id="title" placeholder="title" name="title" />
+        <form onSubmit={submit} onChange={handleChange} className="form">
           <input
+            type="string"
+            id="title"
+            placeholder="title"
+            name="title"
+            className="title"
+          />
+          <textarea
             type="string"
             id="snippet"
             placeholder="snippet"
             name="snippet"
+            className="snippet"
           />
-          <input type="submit" id="submit" />
+          <input type="submit" id="submit" value="Post" className="submit" />
         </form>
       )}
     </div>
